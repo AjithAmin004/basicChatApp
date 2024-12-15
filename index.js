@@ -1,5 +1,5 @@
 import express from "express"
-import { createServer} from "http"
+import { createServer } from "http"
 import "dotenv/config"
 import path from "path"
 import { Server } from "socket.io"
@@ -15,14 +15,16 @@ const io = new Server(server);
 app.use(express.static(path.join(process.cwd(), "public")));
 const port = process.env.PORT || 3000;
 
-app.get('/',(req, res)=>{
+app.get('/', (req, res) => {
     return res.sendFile('./public/index.html')
 })
 
 io.on('connection', (socket) => {
-    // console.log('a user connected ',socket.id);
-    socket.on("chat message",(message)=>{
-        socket.broadcast.emit("chat message",message);
+    // console.log('a user connected ',socket.id)
+    socket.on("chat message", (message, callback) => {
+        // console.log("msg",message)
+        socket.broadcast.emit("chat message", message);
+        callback();
     })
 });
 
