@@ -3,6 +3,8 @@ import { createServer } from "http"
 import "dotenv/config"
 import path from "path"
 import { Server } from "socket.io"
+import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
+
 
 // create an express app
 const app = express();
@@ -21,6 +23,11 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     // console.log('a user connected ',socket.id)
+    const shortName = uniqueNamesGenerator({
+        dictionaries: [adjectives, animals], // colors can be omitted here as not used
+        length: 2
+    });
+    socket.emit("name",shortName)
     socket.on("chat message", (message, callback) => {
         // console.log("msg",message)
         socket.broadcast.emit("chat message", message);

@@ -67,6 +67,10 @@
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script>
       const socket = new io();
+      let name;
+      socket.on("name",(msg)=>{
+        name = msg
+      })
       const form = document.getElementById("form");
       const input = document.getElementById("input");
       const messages = document.getElementById("messages");
@@ -83,6 +87,7 @@
               window.scrollTo(0, document.body.scrollHeight);
               messages.appendChild(i);
               input.value = "";
+              msg = `${name}: ${msg}`
               const response = await socket
                 .timeout(4000)
                 .emitWithAck("chat message", msg);
